@@ -19,12 +19,12 @@ func main() {
 
 	defer cc.Close()
 
-	c := calculatorpb.NewAddServiceClient(cc)
+	c := calculatorpb.NewCalculatorServiceClient(cc)
 	doUnary(c)
 
 }
 
-func doUnary(c calculatorpb.AddServiceClient) {
+func doUnary(c calculatorpb.CalculatorServiceClient) {
 	req := &calculatorpb.AddRequest{
 		Adding: &calculatorpb.Adding{
 			Addone: 10,

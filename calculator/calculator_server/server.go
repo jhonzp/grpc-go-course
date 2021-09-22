@@ -28,7 +28,7 @@ func main() {
 		log.Fatalf("Failed to listen %v", err)
 	}
 	s := grpc.NewServer()
-	calculatorpb.RegisterAddServiceServer(s, &server{})
+	calculatorpb.RegisterCalculatorServiceServer(s, &server{})
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

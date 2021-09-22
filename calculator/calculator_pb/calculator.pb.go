@@ -160,7 +160,7 @@ func init() {
 }
 
 var fileDescriptor_5b44e1cc294e667d = []byte{
-	// 197 bytes of a gzipped FileDescriptorProto
+	// 200 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x4c, 0x4e, 0xcc, 0x49,
 	0x2e, 0xcd, 0x49, 0x2c, 0xc9, 0x2f, 0xd2, 0x47, 0x30, 0xe3, 0x0b, 0x92, 0x90, 0x78, 0x7a, 0x05,
 	0x45, 0xf9, 0x25, 0xf9, 0x42, 0x5c, 0x08, 0x11, 0x25, 0x0b, 0x2e, 0x36, 0xc7, 0x94, 0x94, 0xcc,
@@ -169,11 +169,11 @@ var fileDescriptor_5b44e1cc294e667d = []byte{
 	0x57, 0xb2, 0xe0, 0xe2, 0x72, 0x4c, 0x49, 0x09, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0xd2,
 	0x02, 0xab, 0xca, 0xcc, 0x4b, 0x07, 0xeb, 0xe6, 0x36, 0x12, 0xd2, 0x43, 0xb2, 0x16, 0x62, 0x43,
 	0x10, 0x54, 0x85, 0x92, 0x2a, 0x17, 0x37, 0x58, 0x67, 0x71, 0x41, 0x7e, 0x5e, 0x31, 0xd8, 0x82,
-	0xa2, 0xd4, 0xe2, 0xd2, 0x9c, 0x12, 0x98, 0xc5, 0x10, 0x9e, 0x91, 0x1b, 0xd8, 0x82, 0xe0, 0xd4,
-	0xa2, 0xb2, 0xcc, 0xe4, 0x54, 0x21, 0x0b, 0x2e, 0x66, 0xc7, 0x94, 0x14, 0x21, 0x31, 0x34, 0x73,
-	0xa1, 0xf6, 0x4b, 0x89, 0x63, 0x88, 0x43, 0x4c, 0x57, 0x62, 0x70, 0xe2, 0x8b, 0xe2, 0x41, 0xc8,
-	0x15, 0x24, 0x25, 0xb1, 0x81, 0x43, 0xc1, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0xc3, 0xa7, 0x23,
-	0xc4, 0x32, 0x01, 0x00, 0x00,
+	0xa2, 0xd4, 0xe2, 0xd2, 0x9c, 0x12, 0x98, 0xc5, 0x10, 0x9e, 0x91, 0x2f, 0x97, 0xa0, 0x33, 0xdc,
+	0x8c, 0xe0, 0xd4, 0xa2, 0xb2, 0xcc, 0xe4, 0x54, 0x21, 0x0b, 0x2e, 0x66, 0xc7, 0x94, 0x14, 0x21,
+	0x31, 0x34, 0xe3, 0xa1, 0xce, 0x90, 0x12, 0xc7, 0x10, 0x87, 0x58, 0xa2, 0xc4, 0xe0, 0xc4, 0x17,
+	0xc5, 0x83, 0x90, 0x2b, 0x48, 0x4a, 0x62, 0x03, 0x07, 0x86, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff,
+	0x16, 0xce, 0x17, 0x72, 0x39, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -184,74 +184,74 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// AddServiceClient is the client API for AddService service.
+// CalculatorServiceClient is the client API for CalculatorService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type AddServiceClient interface {
+type CalculatorServiceClient interface {
 	//unary
 	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
 }
 
-type addServiceClient struct {
+type calculatorServiceClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewAddServiceClient(cc *grpc.ClientConn) AddServiceClient {
-	return &addServiceClient{cc}
+func NewCalculatorServiceClient(cc *grpc.ClientConn) CalculatorServiceClient {
+	return &calculatorServiceClient{cc}
 }
 
-func (c *addServiceClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
+func (c *calculatorServiceClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
 	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/calculator.AddService/Add", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/calculator.CalculatorService/Add", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AddServiceServer is the server API for AddService service.
-type AddServiceServer interface {
+// CalculatorServiceServer is the server API for CalculatorService service.
+type CalculatorServiceServer interface {
 	//unary
 	Add(context.Context, *AddRequest) (*AddResponse, error)
 }
 
-// UnimplementedAddServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedAddServiceServer struct {
+// UnimplementedCalculatorServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedCalculatorServiceServer struct {
 }
 
-func (*UnimplementedAddServiceServer) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
+func (*UnimplementedCalculatorServiceServer) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
 
-func RegisterAddServiceServer(s *grpc.Server, srv AddServiceServer) {
-	s.RegisterService(&_AddService_serviceDesc, srv)
+func RegisterCalculatorServiceServer(s *grpc.Server, srv CalculatorServiceServer) {
+	s.RegisterService(&_CalculatorService_serviceDesc, srv)
 }
 
-func _AddService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CalculatorService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AddServiceServer).Add(ctx, in)
+		return srv.(CalculatorServiceServer).Add(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/calculator.AddService/Add",
+		FullMethod: "/calculator.CalculatorService/Add",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AddServiceServer).Add(ctx, req.(*AddRequest))
+		return srv.(CalculatorServiceServer).Add(ctx, req.(*AddRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _AddService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "calculator.AddService",
-	HandlerType: (*AddServiceServer)(nil),
+var _CalculatorService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "calculator.CalculatorService",
+	HandlerType: (*CalculatorServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Add",
-			Handler:    _AddService_Add_Handler,
+			Handler:    _CalculatorService_Add_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
