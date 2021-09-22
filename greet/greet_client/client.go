@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 
 	"github.com/jhonzp/grpc-go-course/greet/greetpb"
@@ -19,12 +20,13 @@ func main() {
 	defer cc.Close()
 
 	c := greetpb.NewGreetServiceClient(cc)
-	doUnary(c)
+	//doUnary(c)
+	doServerStreaming(c)
 }
 
 func doUnary(c greetpb.GreetServiceClient) {
 
-	//fmt.Printf("Created Go Client: %f", c)
+	fmt.Println("Starting to do a Unary RPC .. ")
 	req := &greetpb.GreetRequest{
 		Greeting: &greetpb.Greeting{
 			FirtsName: "Jhon Steven",
@@ -37,5 +39,31 @@ func doUnary(c greetpb.GreetServiceClient) {
 	}
 
 	log.Printf("Response: %v", res.Result)
+
+}
+
+func doServerStreaming(c greetpb.GreetServiceClient) {
+	fmt.Println("Starting to do a Server Streaming RPC .. ")
+	req := &greetpb.GreetManyTimesRequest{
+		Greeting: &greetpb.Greeting{
+			FirtsName: "Jhon",
+			LastName:  "ZP",
+		},
+	}
+	resStream, err := c.GreetManyTimes(context.Background(), req)
+	if err != nil {
+		log.Fatalf("could not invoked to Greet Server Streaming grpc function: %v", err)
+	}
+
+	for {
+		msg, err := resStream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalf("Error while reading stream: %v", err)
+		}
+		fmt.Printf("Response from GreerManyTimes: %+v\n", msg.GetResult())
+	}
 
 }
