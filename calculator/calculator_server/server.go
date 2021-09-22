@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"math"
 	"net"
+	"time"
 
 	calculatorpb "github.com/jhonzp/grpc-go-course/calculator/calculator_pb"
 	"google.golang.org/grpc"
@@ -19,6 +21,25 @@ func (c *server) Add(ctx context.Context, req *calculatorpb.AddRequest) (*calcul
 		Result: result,
 	}
 	return res, nil
+}
+
+func (c *server) PrimeNumberDescomposition(req *calculatorpb.PrimeNumberDescompositionRequest, stream calculatorpb.CalculatorService_PrimeNumberDescompositionServer) error {
+	fmt.Printf("PrimeNumberDescomposition was invoked: %v", req)
+	var n float64 = float64(req.GetPrimeNumber().PrimeNumber)
+	var k float64 = float64(2)
+	for n > 1 {
+		if math.Mod(n, k) == 0 {
+			res := &calculatorpb.PrimeNumberDescompositionResponse{
+				Result: int32(k),
+			}
+			n = (n / k)
+			stream.Send(res)
+			time.Sleep(300 * time.Millisecond)
+		} else {
+			k = k + 1
+		}
+	}
+	return nil
 }
 
 func main() {
