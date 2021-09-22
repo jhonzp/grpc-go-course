@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 
 	calculatorpb "github.com/jhonzp/grpc-go-course/calculator/calculator_pb"
@@ -20,7 +21,8 @@ func main() {
 	defer cc.Close()
 
 	c := calculatorpb.NewCalculatorServiceClient(cc)
-	doUnary(c)
+	//doUnary(c)
+	doStreamServer(c)
 
 }
 
@@ -37,4 +39,28 @@ func doUnary(c calculatorpb.CalculatorServiceClient) {
 		log.Fatalf("Could not invoke to calculator grpc services: %v", err)
 	}
 	fmt.Printf("\nResponse %+v\n", res.Result)
+}
+
+func doStreamServer(c calculatorpb.CalculatorServiceClient) {
+	req := &calculatorpb.PrimeNumberDescompositionRequest{
+		PrimeNumber: &calculatorpb.PrimeNumber{
+			PrimeNumber: 120,
+		},
+	}
+
+	resStream, err := c.PrimeNumberDescomposition(context.Background(), req)
+	if err != nil {
+		log.Fatalf("could not invoked to PrimeNumberDescomposition Server Streaming grpc function: %v", err)
+	}
+
+	for {
+		msg, err := resStream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalf("Error while reading stream: %v", err)
+		}
+		fmt.Printf("Response from PrimeNumberDescomposition: %+v\n", msg.GetResult())
+	}
 }
