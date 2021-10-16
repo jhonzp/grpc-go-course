@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"time"
 
 	"github.com/jhonzp/grpc-go-course/greet/greetpb"
 	"google.golang.org/grpc"
@@ -21,7 +22,8 @@ func main() {
 
 	c := greetpb.NewGreetServiceClient(cc)
 	//doUnary(c)
-	doServerStreaming(c)
+	//doServerStreaming(c)
+	doClientStreaming(c)
 }
 
 func doUnary(c greetpb.GreetServiceClient) {
@@ -65,5 +67,55 @@ func doServerStreaming(c greetpb.GreetServiceClient) {
 		}
 		fmt.Printf("Response from GreerManyTimes: %+v\n", msg.GetResult())
 	}
+
+}
+
+func doClientStreaming(c greetpb.GreetServiceClient) {
+	fmt.Println("Starting to do a Client Streaming RPC .. ")
+	request := []*greetpb.LongGreetRequest{
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirtsName: "Jhon",
+			},
+		},
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirtsName: "Steven",
+			},
+		},
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirtsName: "Pablo",
+			},
+		},
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirtsName: "Lucy",
+			},
+		},
+		&greetpb.LongGreetRequest{
+			Greeting: &greetpb.Greeting{
+				FirtsName: "Rochi",
+			},
+		},
+	}
+	stream, err := c.LongGreet(context.Background())
+
+	if err != nil {
+		log.Fatalf("Error while calling LongGreet: %v", err)
+	}
+
+	for _, req := range request {
+		fmt.Printf("Sending req:%+v\n", req)
+		stream.Send(req)
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	res, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Fatalf("Error while reciving response from LongGreet: %v", err)
+	}
+
+	fmt.Printf("LongGreet Response: %v", res)
 
 }
