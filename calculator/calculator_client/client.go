@@ -22,7 +22,8 @@ func main() {
 
 	c := calculatorpb.NewCalculatorServiceClient(cc)
 	//doUnary(c)
-	doStreamServer(c)
+	//doStreamServer(c)
+	doClientStreaming(c)
 
 }
 
@@ -63,4 +64,40 @@ func doStreamServer(c calculatorpb.CalculatorServiceClient) {
 		}
 		fmt.Printf("Response from PrimeNumberDescomposition: %+v\n", msg.GetResult())
 	}
+}
+
+func doClientStreaming(c calculatorpb.CalculatorServiceClient) {
+	request := []*calculatorpb.AVGNumberRequest{
+		{
+			Number: 1,
+		},
+		{
+			Number: 2,
+		},
+		{
+			Number: 3,
+		},
+		{
+			Number: 4,
+		},
+	}
+
+	stream, err := c.ComputeAvarage(context.Background())
+
+	if err != nil {
+		log.Fatalf("Error while calling ComputeAvarage %v", err)
+	}
+
+	for _, req := range request {
+		fmt.Printf("Sending: %+v\n", req)
+		stream.Send(req)
+	}
+
+	res, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Fatalf("Error while reciving response : %v", err)
+	}
+
+	fmt.Printf("AVGNumberRequest response: %v\n", res)
+
 }

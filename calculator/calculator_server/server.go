@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"math"
 	"net"
@@ -40,6 +41,28 @@ func (c *server) PrimeNumberDescomposition(req *calculatorpb.PrimeNumberDescompo
 		}
 	}
 	return nil
+}
+
+func (c *server) ComputeAvarage(stream calculatorpb.CalculatorService_ComputeAvarageServer) error {
+	fmt.Printf("ComputeAvarage was invoked ")
+	count := 0
+	total := 0
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			result := float64(total) / float64(count)
+			//we have finished to reading request.
+			return stream.SendAndClose(&calculatorpb.AVGResponse{
+				Result: result,
+			})
+		}
+		if err != nil {
+			log.Fatalf("Error while reading request %v", err)
+		}
+		count++
+		total += int(req.GetNumber())
+	}
+
 }
 
 func main() {
